@@ -8,11 +8,10 @@ from PyQt5.QtWidgets import QFileDialog
 if "mobase" not in sys.modules:
     import mock_mobase as mobase
 
-class DiagnoseEmptyOverwrite(mobase.IPluginDiagnose, mobase.IPluginModPage):
+class DiagnoseEmptyOverwrite(mobase.IPluginDiagnose):
     
     def __init__(self):
         super(DiagnoseEmptyOverwrite, self).__init__()
-        mobase.IPluginModPage.__init__(self)
         self.__organizer = None
 
     def init(self, organizer):
@@ -24,16 +23,16 @@ class DiagnoseEmptyOverwrite(mobase.IPluginDiagnose, mobase.IPluginModPage):
         return True
 
     def name(self):
-        return "Empty Overwrite Diagnosis... with a mod page!"
+        return "Empty Overwrite Diagnosis"
 
     def author(self):
         return "AnyOldName3"
 
     def description(self):
-        return self.__tr("Complains and bitches if your overwrite directory is empty... and adds a nearly useless mod page!")
+        return self.__tr("Complains and bitches if your overwrite directory is empty.")
 
     def version(self):
-        return mobase.VersionInfo(2, 0, 0, mobase.ReleaseType.final)
+        return mobase.VersionInfo(1, 1, 0, mobase.ReleaseType.final)
 
     def isActive(self):
         return True
@@ -61,39 +60,6 @@ class DiagnoseEmptyOverwrite(mobase.IPluginDiagnose, mobase.IPluginModPage):
         open(os.path.join(self.__organizer.overwritePath(), "blank file.txt"), 'a').close()
         self.__organizer.refreshModList()
         QMessageBox.information(None, self.__tr("File Created"), self.__tr("A blank file has been created in your Overwrite directory"))
-    
-    def displayName(self):
-        #QMessageBox.information(None, "displayName", "displayName")
-        return "Probably TES Alliance"
-    
-    def icon(self):
-        #QMessageBox.information(None, "icon", "icon")
-        return QIcon()
-    
-    def pageURL(self):
-        #QMessageBox.information(None, "pageURL", "pageURL")
-        return QUrl("http://tesalliance.org")
-    
-    def useIntegratedBrowser(self):
-        #QMessageBox.information(None, "useIntegratedBrowser", "useIntegratedBrowser")
-        return True
-    
-    def handlesDownload(self, pageURL, downloadURL, fileInfo):
-        QMessageBox.information(None, "handlesDownload", "handlesDownload")
-        
-        import re
-        if not re.match(r"https?://tesalliance.org/forums/index.php\?/files/download/([0-9]+)-([^/]+)/", pageURL.toString()):
-            return False
-        if not re.match(r"https?://tesalliance.org/forums/index.php\?/files/getdownload/([0-9]+)-([^/]+)/", downloadURL.toString()):
-            return False
-        
-        # We now need to set the fields of fileInfo
-        
-        return True
-    
-    def setParentWidget(self, widget):
-        #QMessageBox.information(None, "setParentWidget", "setParentWidget")
-        pass
     
     def __tr(self, str):
         return QCoreApplication.translate("DiagnoseEmptyOverwrite", str)
